@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int maxsum = 0, nomer = 0;
+int maxsum = -1, nomer = 0;
 
 int main()
 {
@@ -61,9 +61,14 @@ int main()
     }
 
     for (int i = 0; i < 3; ++i) {
-        if (abs(matr[i][0]) + abs(matr[i][1]) + abs(matr[i][2]) + abs(matr[i][3]) > maxsum) {
+        int tempSum = 0;
+        for (int j = 0; j < 3; ++j) {
+            tempSum = abs(matr[i][j]) + abs(matr[i][j + 1]);
+        }
+
+        if (tempSum > maxsum) {
             nomer = i;
-            maxsum = abs(matr[i][0]) + abs(matr[i][1]) + abs(matr[i][2]) + abs(matr[i][3]);
+            maxsum = tempSum;
         }
     }
 
