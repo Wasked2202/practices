@@ -31,6 +31,7 @@ Student& Student::operator=(const Student& other) {
     std::swap(tmp.name_, name_);
     std::swap(tmp.surname_, surname_);
     std::swap(tmp.debts_, debts_);
+    if (this == &other) return *this;
     return *this;
 }
 
@@ -39,7 +40,13 @@ Student Student::operator+(const Student& other) const {
 
     summ.name_ = name_ + " и " + other.name_;
     summ.surname_ = surname_ + " и " + other.surname_;
-    summ.debts_ = debts_;
+    for (int i = 0; i < debts_.size(); i++) {
+        const std::string& debt = debts_[i];
+
+        if (std::find(summ.debts_.begin(), summ.debts_.end(), debt) == summ.debts_.end()) {
+            summ.debts_.push_back(debt);
+        }
+    }
     for (int i = 0; i < other.debts_.size(); i++) {
         const std::string& debt = other.debts_[i];
 
@@ -55,17 +62,14 @@ Student& Student::operator-=(const Student& other) {
     name_ = name_ + " без " + other.name_;
     surname_ = surname_ + " без " + other.surname_;
 
-    std::vector<std::string> minus;
-
-    for (int i = 0; i < debts_.size(); i++) {
-        const std::string& debt = debts_[i];
-
-        if (std::find(other.debts_.begin(), other.debts_.end(), debt) == other.debts_.end()) {
-            minus.push_back(debt);
+    for (auto it = debts_.begin(); it != debts_.end();) {
+        if (std::find(other.debts_.begin(), other.debts_.end(), *it) != other.debts_.end()) {
+            it = debts_.erase(it);
+        } else {
+            ++it;
         }
     }
 
-    debts_ = minus;
     return *this;
 }
 
